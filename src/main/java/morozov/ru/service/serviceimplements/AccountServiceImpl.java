@@ -19,11 +19,21 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Override
+    public Account getById(int accountId) {
+        return accountRepository.getById(accountId);
+    }
+
+    @Override
     public boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, double sum) {
         boolean result = false;
         Account fromAccount = accountRepository.getById(accountIdFrom);
         Account toAccount = accountRepository.getById(accountIdTo);
-        if (fromAccount.getOwner().getId() == ownerId && toAccount.getOwner().getId() == ownerId) {
+        if (
+                fromAccount != null
+                        && toAccount != null
+                        && fromAccount.getOwner().getId() == ownerId
+                        && toAccount.getOwner().getId() == ownerId
+        ) {
             if (
                     this.subWithdrawals(
                             fromAccount,
@@ -57,6 +67,12 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.deleteById(accountId);
     }
 
+    /**
+     * Методля для зачисления средств
+     *
+     * @param targetAccount
+     * @param payment
+     */
     private void subTransfer(Account targetAccount, Payment payment) {
         double currentSum = targetAccount.getBalance();
         targetAccount.setBalance(currentSum + payment.getSum());
@@ -65,6 +81,13 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(targetAccount);
     }
 
+    /**
+     * Метод для списания средств
+     *
+     * @param targetAccount
+     * @param payment
+     * @return
+     */
     private boolean subWithdrawals(Account targetAccount, Payment payment) {
         boolean result = false;
         double newBalance = targetAccount.getBalance() - payment.getSum();

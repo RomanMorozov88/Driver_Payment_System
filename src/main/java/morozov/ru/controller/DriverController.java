@@ -5,6 +5,7 @@ import morozov.ru.model.Driver;
 import morozov.ru.model.util.ReMessageString;
 import morozov.ru.service.serviceinterface.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,11 +13,17 @@ import java.util.List;
 @RestController
 public class DriverController {
 
-    private final static String SUCCESS_MSG = "Done.";
-    private final static String FAIL_MSG = "Something wrong.";
+    @Value("${done.answer}")
+    private String successMsg;
+    @Value("${fail.answer}")
+    private String failMsg;
+
+    private final DriverService driverService;
 
     @Autowired
-    private DriverService driverService;
+    public DriverController(DriverService driverService) {
+        this.driverService = driverService;
+    }
 
     @GetMapping("/dps/drivers")
     public List<Driver> getAllDrivers() {
@@ -38,9 +45,9 @@ public class DriverController {
     public ReMessageString createAccount(@PathVariable Integer id) {
         ReMessageString msg = new ReMessageString();
         if (driverService.createAccount(id)) {
-            msg.setData(SUCCESS_MSG);
+            msg.setData(successMsg);
         } else {
-            msg.setData(FAIL_MSG);
+            msg.setData(failMsg);
         }
         return msg;
     }

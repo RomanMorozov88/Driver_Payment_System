@@ -1,8 +1,10 @@
 package morozov.ru.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 @Entity
@@ -14,9 +16,11 @@ public class Payment {
     private int id;
     private boolean debit;
     private double sum;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account", nullable=false)
     private Account account;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss z")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar created = new GregorianCalendar();
 
