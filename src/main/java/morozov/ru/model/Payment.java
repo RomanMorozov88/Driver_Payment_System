@@ -1,7 +1,9 @@
 package morozov.ru.model;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Entity
 @Table(name = "payments")
@@ -10,13 +12,13 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private boolean isDebit;
+    private boolean debit;
     private double sum;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account", nullable=false)
     private Account account;
-    @Temporal(TemporalType.DATE)
-    private Date created;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar created = new GregorianCalendar();
 
     public Payment() {
     }
@@ -30,11 +32,11 @@ public class Payment {
     }
 
     public boolean isDebit() {
-        return isDebit;
+        return debit;
     }
 
     public void setDebit(boolean debit) {
-        isDebit = debit;
+        this.debit = debit;
     }
 
     public double getSum() {
@@ -53,11 +55,11 @@ public class Payment {
         this.account = account;
     }
 
-    public Date getCreated() {
+    public Calendar getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(Calendar created) {
         this.created = created;
     }
 }

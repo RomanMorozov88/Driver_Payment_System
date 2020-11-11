@@ -1,4 +1,4 @@
-package morozov.ru.repository;
+package morozov.ru.service.repository;
 
 import morozov.ru.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
