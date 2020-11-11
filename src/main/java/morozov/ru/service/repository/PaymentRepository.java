@@ -13,11 +13,15 @@ import java.util.List;
  */
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
-    @Query("SELECT sum(pmnt.sum) FROM Payment pmnt where pmnt.account.id = ?1 and pmnt.debit = ?2 and (pmnt.created between ?3 and ?4)")
+    @Query(
+            "SELECT sum(pmnt.sum) FROM Payment pmnt "
+                    + "where pmnt.account.id = ?1 and pmnt.debit = ?2 "
+                    + "and (pmnt.created between ?3 and ?4)")
     Double getTotalSum(int accountId, boolean debit, Calendar start, Calendar end);
 
     /**
      * Операции по счёту с accountId за период между start и end
+     *
      * @param accountId
      * @param start
      * @param end
