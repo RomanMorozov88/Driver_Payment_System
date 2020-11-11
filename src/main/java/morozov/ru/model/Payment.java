@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -14,8 +15,8 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private boolean debit;
-    private double sum;
+    private String operation;
+    private BigDecimal sum;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account", nullable=false)
@@ -27,8 +28,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(boolean debit, double sum, Calendar created) {
-        this.debit = debit;
+    public Payment(String operation, BigDecimal sum, Calendar created) {
+        this.operation = operation;
         this.sum = sum;
         this.created = created;
     }
@@ -41,19 +42,19 @@ public class Payment {
         this.id = id;
     }
 
-    public boolean isDebit() {
-        return debit;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setDebit(boolean debit) {
-        this.debit = debit;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 

@@ -5,18 +5,31 @@ import morozov.ru.model.Payment;
 import morozov.ru.service.repository.AccountRepository;
 import morozov.ru.service.serviceinterface.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
+
+import static java.math.BigDecimal.*;
 
 @Repository
 @Transactional(isolation = Isolation.READ_COMMITTED)
 public class AccountServiceImpl implements AccountService {
 
+    @Value("${payment.debit}")
+    private String debitKey;
+    @Value("${payment.credit}")
+    private String creditKey;
+
+    private final AccountRepository accountRepository;
+
     @Autowired
-    private AccountRepository accountRepository;
+    public AccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public Account getById(int accountId) {
@@ -24,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, double sum) {
+    public boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, BigDecimal sum) {
         boolean result = false;
         Account fromAccount = accountRepository.getById(accountIdFrom);
         Account toAccount = accountRepository.getById(accountIdTo);
@@ -37,10 +50,10 @@ public class AccountServiceImpl implements AccountService {
             if (
                     this.subWithdrawals(
                             fromAccount,
-                            new Payment(false, sum, Calendar.getInstance())
+                            new Payment(creditKey, sum, Calendar.getInstance())
                     )
             ) {
-                this.subTransfer(toAccount, new Payment(true, sum, Calendar.getInstance()));
+                this.subTransfer(toAccount, new Payment(debitKey, sum, Calendar.getInstance()));
                 result = true;
             }
         }
@@ -52,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
         boolean result = false;
         Account targetAccount = accountRepository.getById(accountId);
         if (targetAccount != null) {
-            if (payment.isDebit()) {
+            if (payment.getOperation().equals(debitKey)) {
                 this.subTransfer(targetAccount, payment);
                 result = true;
             } else {
@@ -74,8 +87,8 @@ public class AccountServiceImpl implements AccountService {
      * @param payment
      */
     private void subTransfer(Account targetAccount, Payment payment) {
-        double currentSum = targetAccount.getBalance();
-        targetAccount.setBalance(currentSum + payment.getSum());
+        BigDecimal currentSum = targetAccount.getBalance();
+        targetAccount.setBalance(currentSum.add(payment.getSum()));
         payment.setAccount(targetAccount);
         targetAccount.setPayment(payment);
         accountRepository.save(targetAccount);
@@ -90,8 +103,8 @@ public class AccountServiceImpl implements AccountService {
      */
     private boolean subWithdrawals(Account targetAccount, Payment payment) {
         boolean result = false;
-        double newBalance = targetAccount.getBalance() - payment.getSum();
-        if (newBalance >= 0) {
+        BigDecimal newBalance = targetAccount.getBalance().subtract(payment.getSum());
+        if (newBalance.compareTo(valueOf(0)) >= 0) {
             targetAccount.setBalance(newBalance);
             payment.setAccount(targetAccount);
             targetAccount.setPayment(payment);

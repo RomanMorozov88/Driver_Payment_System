@@ -2,7 +2,7 @@ package morozov.ru.controller;
 
 import morozov.ru.model.Account;
 import morozov.ru.model.Payment;
-import morozov.ru.model.util.ReMessageDouble;
+import morozov.ru.model.util.ReMessageBigDecimal;
 import morozov.ru.model.util.ReMessageString;
 import morozov.ru.service.serviceinterface.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class AccountController {
     public ReMessageString transfer(@PathVariable Integer owner,
                                     @PathVariable Integer from,
                                     @PathVariable Integer to,
-                                    @RequestBody ReMessageDouble message) {
+                                    @RequestBody ReMessageBigDecimal message) {
         ReMessageString msg = new ReMessageString();
         if (accountService.internalTransfer(owner, from, to, message.getData())) {
             msg.setData(successMsg);

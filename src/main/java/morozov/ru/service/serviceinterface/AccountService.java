@@ -3,6 +3,8 @@ package morozov.ru.service.serviceinterface;
 import morozov.ru.model.Account;
 import morozov.ru.model.Payment;
 
+import java.math.BigDecimal;
+
 public interface AccountService {
 
     Account getById(int accountId);
@@ -16,7 +18,7 @@ public interface AccountService {
      * @param sum
      * @return
      */
-    boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, double sum);
+    boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, BigDecimal sum);
 
     /**
      * Зачисление\списание средств.

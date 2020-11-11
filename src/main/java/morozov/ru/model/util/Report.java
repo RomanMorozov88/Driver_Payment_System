@@ -1,26 +1,28 @@
 package morozov.ru.model.util;
 
+import java.math.BigDecimal;
+
 public class Report {
 
-    private double debit;
-    private double credit;
+    private BigDecimal debit;
+    private BigDecimal credit;
 
     public Report() {
     }
 
-    public double getDebit() {
+    public BigDecimal getDebit() {
         return debit;
     }
 
-    public void setDebit(double debit) {
+    public void setDebit(BigDecimal debit) {
         this.debit = debit;
     }
 
-    public double getCredit() {
+    public BigDecimal getCredit() {
         return credit;
     }
 
-    public void setCredit(double credit) {
+    public void setCredit(BigDecimal credit) {
         this.credit = credit;
     }
 }

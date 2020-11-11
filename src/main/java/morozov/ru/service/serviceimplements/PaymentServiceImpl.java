@@ -6,6 +6,7 @@ import morozov.ru.model.util.Report;
 import morozov.ru.service.repository.PaymentRepository;
 import morozov.ru.service.serviceinterface.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,11 @@ import java.util.List;
 @Repository
 @Transactional(isolation = Isolation.READ_COMMITTED)
 public class PaymentServiceImpl implements PaymentService {
+
+    @Value("${payment.debit}")
+    private String debitKey;
+    @Value("${payment.credit}")
+    private String creditKey;
 
     private PaymentRepository paymentRepository;
 
@@ -27,10 +33,10 @@ public class PaymentServiceImpl implements PaymentService {
     public Report getReport(int accountId, ControlPeriod period) {
         Report result = new Report();
         result.setDebit(
-                paymentRepository.getTotalSum(accountId, true, period.getStart(), period.getEnd())
+                paymentRepository.getTotalSum(accountId, debitKey, period.getStart(), period.getEnd())
         );
         result.setCredit(
-                paymentRepository.getTotalSum(accountId, false, period.getStart(), period.getEnd())
+                paymentRepository.getTotalSum(accountId, creditKey, period.getStart(), period.getEnd())
         );
         return result;
     }
