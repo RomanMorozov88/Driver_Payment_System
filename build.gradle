@@ -2,12 +2,19 @@ plugins {
     id 'org.springframework.boot' version '2.3.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id 'application'
 }
 
 group 'Driver_Payment_System'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+version = '0.0.1'
+mainClassName = 'morozov.ru.MainClass'
 
 repositories {
     mavenCentral()

@@ -5,11 +5,11 @@ import morozov.ru.model.Driver;
 import morozov.ru.service.repository.DriverRepository;
 import morozov.ru.service.serviceinterface.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Repository
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -19,8 +19,8 @@ public class DriverServiceImpl implements DriverService {
     private DriverRepository driverRepository;
 
     @Override
-    public List<Driver> getAll() {
-        return driverRepository.findAll();
+    public Page<Driver> getAll(Pageable pageable) {
+        return driverRepository.findAll(pageable);
     }
 
     @Override

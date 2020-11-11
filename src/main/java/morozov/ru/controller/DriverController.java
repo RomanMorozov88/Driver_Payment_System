@@ -6,6 +6,8 @@ import morozov.ru.model.util.ReMessageString;
 import morozov.ru.service.serviceinterface.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +28,12 @@ public class DriverController {
     }
 
     @GetMapping("/dps/drivers")
-    public List<Driver> getAllDrivers() {
-        return driverService.getAll();
+    public List<Driver> getAllDrivers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return driverService.getAll(pageable).getContent();
     }
 
     @PostMapping("/dps/drivers")
