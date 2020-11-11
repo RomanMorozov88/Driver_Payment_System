@@ -5,10 +5,9 @@ import morozov.ru.model.util.ControlPeriod;
 import morozov.ru.model.util.Report;
 import morozov.ru.service.serviceinterface.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +22,14 @@ public class PaymentController {
     }
 
     @GetMapping("/dps/payments/{id}")
-    public List<Payment> getForPeriod(@PathVariable Integer id, @RequestBody ControlPeriod period) {
-        return paymentService.getPaymentsForPeriod(id, period);
+    public List<Payment> getForPeriod(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestBody ControlPeriod period
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return paymentService.getPaymentsForPeriod(id, period, pageable).getContent();
     }
 
     @GetMapping("/dps/payments/total/{id}")

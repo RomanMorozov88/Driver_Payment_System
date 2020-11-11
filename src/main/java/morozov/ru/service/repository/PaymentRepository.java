@@ -1,12 +1,13 @@
 package morozov.ru.service.repository;
 
 import morozov.ru.model.Payment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
@@ -34,6 +35,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
      * @return
      */
     @Query("FROM Payment pmnt where pmnt.account.id = ?1 and (pmnt.created between ?2 and ?3)")
-    List<Payment> getPaymentsForPeriod(int accountId, Calendar start, Calendar end);
+    Page<Payment> getPaymentsForPeriod(int accountId, Calendar start, Calendar end, Pageable pageable);
 
 }
