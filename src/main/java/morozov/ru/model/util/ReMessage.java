@@ -1,17 +1,7 @@
 package morozov.ru.model.util;
 
-public class ReMessage {
+public interface ReMessage<T> {
 
-    private String message;
-
-    public ReMessage() {
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    T getData();
+    void setData(T message);
 }

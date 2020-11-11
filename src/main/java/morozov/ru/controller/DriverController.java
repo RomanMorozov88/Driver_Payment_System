@@ -2,7 +2,7 @@ package morozov.ru.controller;
 
 import morozov.ru.model.Account;
 import morozov.ru.model.Driver;
-import morozov.ru.model.util.ReMessage;
+import morozov.ru.model.util.ReMessageString;
 import morozov.ru.service.serviceinterface.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +35,12 @@ public class DriverController {
     }
 
     @PostMapping("/dps/drivers/{id}")
-    public ReMessage createAccount(@PathVariable Integer id) {
-        ReMessage msg = new ReMessage();
+    public ReMessageString createAccount(@PathVariable Integer id) {
+        ReMessageString msg = new ReMessageString();
         if (driverService.createAccount(id)) {
-            msg.setMessage(SUCCESS_MSG);
+            msg.setData(SUCCESS_MSG);
         } else {
-            msg.setMessage(FAIL_MSG);
+            msg.setData(FAIL_MSG);
         }
         return msg;
     }

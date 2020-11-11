@@ -15,4 +15,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     @Query("SELECT sum(pmnt.sum) FROM Payment pmnt where pmnt.account.id = ?1 and pmnt.debit = ?2 and (pmnt.created between ?3 and ?4)")
     Double getTotalSum(int accountId, boolean debit, Calendar start, Calendar end);
 
+    @Query("FROM Payment as pmnt join Account ac where ac.id = ?1 and (pmnt.created between ?2 and ?3)")
+    Double getPaymentsForPeriod(int accountId, Calendar start, Calendar end);
+
 }

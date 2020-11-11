@@ -16,37 +16,37 @@ import java.util.List;
 public class DriverServiceImpl implements DriverService {
 
     @Autowired
-    private DriverRepository repository;
+    private DriverRepository driverRepository;
 
     @Override
     public List<Driver> getAll() {
-        return repository.findAll();
+        return driverRepository.findAll();
     }
 
     @Override
     public Driver getById(int driverId) {
-        return repository.findById(driverId);
+        return driverRepository.findById(driverId);
     }
 
     @Override
     public Driver save(Driver driver) {
-        return repository.save(driver);
+        return driverRepository.save(driver);
     }
 
     @Override
     public void delete(int driverId) {
-        repository.deleteById(driverId);
+        driverRepository.deleteById(driverId);
     }
 
     @Override
     public boolean createAccount(int driverID) {
         boolean result = false;
-        Driver targetDriver = repository.findById(driverID);
+        Driver targetDriver = driverRepository.findById(driverID);
         if (targetDriver != null) {
             Account account = new Account();
             account.setOwner(targetDriver);
             targetDriver.setAccount(account);
-            repository.save(targetDriver);
+            driverRepository.save(targetDriver);
             result = true;
         }
         return result;

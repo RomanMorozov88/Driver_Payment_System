@@ -23,6 +23,12 @@ public class Payment {
     public Payment() {
     }
 
+    public Payment(boolean debit, double sum, Calendar created) {
+        this.debit = debit;
+        this.sum = sum;
+        this.created = created;
+    }
+
     public int getId() {
         return id;
     }
