@@ -14,6 +14,11 @@ public class ExitController {
     @Autowired
     private ApplicationContext context;
 
+    /**
+     * Т.к. это тестовое задание и
+     * для удобства остановки запущенного jar
+     * отправляем сюда GET запрос.
+     */
     @GetMapping("/exit")
     public void getExit() {
         SpringApplication.exit(context, () -> 0);

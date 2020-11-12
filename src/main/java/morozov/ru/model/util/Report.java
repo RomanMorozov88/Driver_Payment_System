@@ -2,6 +2,9 @@ package morozov.ru.model.util;
 
 import java.math.BigDecimal;
 
+/**
+ * Модель для отчёта по приходам\расходам на счёте.
+ */
 public class Report {
 
     private BigDecimal debit;

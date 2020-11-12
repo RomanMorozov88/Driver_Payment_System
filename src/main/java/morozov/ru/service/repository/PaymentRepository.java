@@ -16,24 +16,25 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     /**
      * Возвращает итоговую сумму всех операции по ключу operation за указанный период.
      *
-     * @param accountId
-     * @param operation
-     * @param start
-     * @param end
+     * @param accountId - id нужного счёта.
+     * @param operation - по какому типу операции делать выборку.
+     * @param start     - начало периода.
+     * @param end       - конец периода.
      * @return
      */
     @Query(
             "SELECT sum(pmnt.sum) FROM Payment pmnt "
                     + "where pmnt.account.id = ?1 and pmnt.operation = ?2 "
-                    + "and (pmnt.created between ?3 and ?4)")
+                    + "and (pmnt.created between ?3 and ?4)"
+    )
     BigDecimal getTotalSum(int accountId, String operation, Calendar start, Calendar end);
 
     /**
      * Операции по счёту с accountId за период между start и end
      *
-     * @param accountId
-     * @param start
-     * @param end
+     * @param accountId - id нужного счёта.
+     * @param start     - начало периода.
+     * @param end       - конец периода.
      * @return
      */
     @Query("FROM Payment pmnt where pmnt.account.id = ?1 and (pmnt.created between ?2 and ?3)")

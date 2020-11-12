@@ -22,6 +22,16 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    /**
+     * Получение подробного списка операций за период.
+     * Pagination
+     *
+     * @param id     - id счёта, по которому нажна информация.
+     * @param page   - номер страницы для просмотра.
+     * @param size   - размер странцы.
+     * @param period - за какой период.
+     * @return
+     */
     @GetMapping("/payments/{id}")
     public List<Payment> getForPeriod(
             @PathVariable Integer id,
@@ -37,6 +47,13 @@ public class PaymentController {
         return result;
     }
 
+    /**
+     * получение оборота за период по отдельному лицевому счету (дебет, кредит отдельно)
+     *
+     * @param id     - id счёта, по которому нажна информация.
+     * @param period - за какой период.
+     * @return
+     */
     @GetMapping("/payments/total/{id}")
     public Report getTotalForPeriod(@PathVariable Integer id, @RequestBody ControlPeriod period) {
         Report result = null;

@@ -71,8 +71,8 @@ public class AccountServiceImplTest {
                 BigDecimal.valueOf(0.1)
         );
         assertTrue(resultOfMethod);
-        assertEquals(BigDecimal.valueOf(1.0), accountService.getById(testAccount.getId()).getBalance());
-        assertEquals(BigDecimal.valueOf(1.2), accountService.getById(secondAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.0"), accountService.getById(testAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.2"), accountService.getById(secondAccount.getId()).getBalance());
     }
 
     @Test
@@ -88,8 +88,8 @@ public class AccountServiceImplTest {
                 BigDecimal.valueOf(2)
         );
         assertFalse(resultOfMethod);
-        assertEquals(BigDecimal.valueOf(1.1), accountService.getById(testAccount.getId()).getBalance());
-        assertEquals(BigDecimal.valueOf(1.1), accountService.getById(secondAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.1"), accountService.getById(testAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.1"), accountService.getById(secondAccount.getId()).getBalance());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class AccountServiceImplTest {
         Payment payment = new Payment(debitKey, BigDecimal.valueOf(0.9), Calendar.getInstance());
         boolean resultOfMethod = accountService.transfer(testAccount.getId(), payment);
         assertTrue(resultOfMethod);
-        assertEquals(BigDecimal.valueOf(2.0), accountService.getById(testAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("2.0"), accountService.getById(testAccount.getId()).getBalance());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class AccountServiceImplTest {
         Payment payment = new Payment(creditKey, BigDecimal.valueOf(0.1), Calendar.getInstance());
         boolean resultOfMethod = accountService.transfer(testAccount.getId(), payment);
         assertTrue(resultOfMethod);
-        assertEquals(BigDecimal.valueOf(1.0), accountService.getById(testAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.0"), accountService.getById(testAccount.getId()).getBalance());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class AccountServiceImplTest {
         Payment payment = new Payment(creditKey, BigDecimal.valueOf(2), Calendar.getInstance());
         boolean resultOfMethod = accountService.transfer(testAccount.getId(), payment);
         assertFalse(resultOfMethod);
-        assertEquals(BigDecimal.valueOf(1.1), accountService.getById(testAccount.getId()).getBalance());
+        assertEquals(new BigDecimal("1.1"), accountService.getById(testAccount.getId()).getBalance());
     }
 
 }

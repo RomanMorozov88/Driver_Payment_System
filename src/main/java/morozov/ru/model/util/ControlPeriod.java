@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Модель для описания периода.
+ */
 public class ControlPeriod {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss z")

@@ -25,6 +25,15 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    /**
+     * Перевод между своими счетами.
+     *
+     * @param owner   - id владельца.
+     * @param from    - id счёта, с которого будет списание.
+     * @param to      - id счёта, на который будет зачисление.
+     * @param message - содержит сумму операции.
+     * @return
+     */
     @PostMapping("/accounts/{owner}/{from}/{to}")
     public ReMessageString doInternalTransfer(@PathVariable Integer owner,
                                               @PathVariable Integer from,
@@ -39,11 +48,24 @@ public class AccountController {
         return msg;
     }
 
+    /**
+     * Получение данных по счёту.
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/accounts/{id}")
     public Account getBalance(@PathVariable Integer id) {
         return accountService.getById(id);
     }
 
+    /**
+     * Зачисение\списание по id счёта.
+     *
+     * @param id
+     * @param payment
+     * @return
+     */
     @PostMapping("/accounts/{id}")
     public ReMessageString doTransfer(@PathVariable Integer id, @RequestBody Payment payment) {
         ReMessageString msg = new ReMessageString();
@@ -55,6 +77,11 @@ public class AccountController {
         return msg;
     }
 
+    /**
+     * Удаление счёта по id
+     *
+     * @param id
+     */
     @DeleteMapping("/accounts/{id}")
     public void deleteAccount(@PathVariable Integer id) {
         accountService.delete(id);

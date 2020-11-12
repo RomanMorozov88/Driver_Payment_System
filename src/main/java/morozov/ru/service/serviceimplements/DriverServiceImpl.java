@@ -39,6 +39,11 @@ public class DriverServiceImpl implements DriverService {
         driverRepository.deleteById(driverId);
     }
 
+    /**
+     * Создаёт новый счёт для указанного водителя.
+     * @param driverID
+     * @return
+     */
     @Override
     public boolean createAccount(int driverID) {
         boolean result = false;

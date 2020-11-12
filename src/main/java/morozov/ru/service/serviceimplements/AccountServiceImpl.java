@@ -36,6 +36,17 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.getById(accountId);
     }
 
+    /**
+     * Перевод между счетами. Делается простая проверка накорректность полученных данных.
+     * Далее происходит операция списания- если она успешна- то затем идёт
+     * операция зачисления.
+     *
+     * @param ownerId
+     * @param accountIdFrom
+     * @param accountIdTo
+     * @param sum
+     * @return
+     */
     @Override
     public boolean internalTransfer(int ownerId, int accountIdFrom, int accountIdTo, BigDecimal sum) {
         boolean result = false;
@@ -60,6 +71,16 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
+    /**
+     * Зачисление\Списание средств.
+     * В зависимости от типа операции-
+     * debit- зачисление (subTransfer метод)
+     * credit- списание (subWithdrawals метод)
+     *
+     * @param accountId
+     * @param payment
+     * @return
+     */
     @Override
     public boolean transfer(int accountId, Payment payment) {
         boolean result = false;
@@ -96,6 +117,7 @@ public class AccountServiceImpl implements AccountService {
 
     /**
      * Метод для списания средств
+     * Если средств недостаточно- вернёт false.
      *
      * @param targetAccount
      * @param payment

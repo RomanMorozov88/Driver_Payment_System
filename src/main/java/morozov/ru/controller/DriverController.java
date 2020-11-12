@@ -28,6 +28,13 @@ public class DriverController {
         this.driverService = driverService;
     }
 
+    /**
+     * Список всех воителей.
+     * Pagination
+     * @param page - номер страницы для просмотра.
+     * @param size - размер странцы.
+     * @return
+     */
     @GetMapping("/drivers")
     public List<Driver> getAllDrivers(
             @RequestParam(defaultValue = "0") int page,
@@ -37,6 +44,11 @@ public class DriverController {
         return driverService.getAll(pageable);
     }
 
+    /**
+     * Создание записи нового водителя.
+     * @param driver - данные нового водителя(тут только имя)
+     * @return
+     */
     @PostMapping("/drivers")
     public Driver saveDriver(@RequestBody Driver driver) {
         Driver result = null;
@@ -46,12 +58,22 @@ public class DriverController {
         return result;
     }
 
+    /**
+     * Получение всех счетов водителя.
+     * @param id - id водителя.
+     * @return
+     */
     @GetMapping("/drivers/{id}")
     public List<Account> getAllDriverAccounts(@PathVariable Integer id) {
         Driver targetDriver = driverService.getById(id);
         return targetDriver != null ? targetDriver.getAccounts() : null;
     }
 
+    /**
+     *  Создание нового счёта.
+     * @param id - id водителя, для которого создаётся счёт.
+     * @return
+     */
     @PostMapping("/drivers/{id}")
     public ReMessageString createAccount(@PathVariable Integer id) {
         ReMessageString msg = new ReMessageString();
@@ -63,6 +85,10 @@ public class DriverController {
         return msg;
     }
 
+    /**
+     * Удаление водителя по id
+     * @param id
+     */
     @DeleteMapping("/drivers/{id}")
     public void deleteDriver(@PathVariable Integer id) {
         driverService.delete(id);
