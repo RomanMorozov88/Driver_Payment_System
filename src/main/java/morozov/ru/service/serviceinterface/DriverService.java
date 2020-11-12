@@ -1,12 +1,13 @@
 package morozov.ru.service.serviceinterface;
 
 import morozov.ru.model.Driver;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface DriverService {
 
-    Page<Driver> getAll(Pageable pageable);
+    List<Driver> getAll(Pageable pageable);
 
     Driver getById(int driverId);
 

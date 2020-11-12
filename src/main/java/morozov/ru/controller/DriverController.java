@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/dps")
 public class DriverController {
 
     @Value("${done.answer}")
@@ -27,27 +28,31 @@ public class DriverController {
         this.driverService = driverService;
     }
 
-    @GetMapping("/dps/drivers")
+    @GetMapping("/drivers")
     public List<Driver> getAllDrivers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return driverService.getAll(pageable).getContent();
+        return driverService.getAll(pageable);
     }
 
-    @PostMapping("/dps/drivers")
+    @PostMapping("/drivers")
     public Driver saveDriver(@RequestBody Driver driver) {
-        return driverService.save(driver);
+        Driver result = null;
+        if (driver != null && driver.getName() != null) {
+            result = driverService.save(driver);
+        }
+        return result;
     }
 
-    @GetMapping("/dps/drivers/{id}")
+    @GetMapping("/drivers/{id}")
     public List<Account> getAllDriverAccounts(@PathVariable Integer id) {
         Driver targetDriver = driverService.getById(id);
         return targetDriver != null ? targetDriver.getAccounts() : null;
     }
 
-    @PostMapping("/dps/drivers/{id}")
+    @PostMapping("/drivers/{id}")
     public ReMessageString createAccount(@PathVariable Integer id) {
         ReMessageString msg = new ReMessageString();
         if (driverService.createAccount(id)) {
@@ -58,7 +63,7 @@ public class DriverController {
         return msg;
     }
 
-    @DeleteMapping("/dps/drivers/{id}")
+    @DeleteMapping("/drivers/{id}")
     public void deleteDriver(@PathVariable Integer id) {
         driverService.delete(id);
     }

@@ -6,16 +6,16 @@ import morozov.ru.service.repository.AccountRepository;
 import morozov.ru.service.serviceinterface.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import static java.math.BigDecimal.*;
+import static java.math.BigDecimal.valueOf;
 
-@Repository
+@Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
 public class AccountServiceImpl implements AccountService {
 
@@ -68,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
             if (payment.getOperation().equals(debitKey)) {
                 this.subTransfer(targetAccount, payment);
                 result = true;
-            } else {
+            } else if ((payment.getOperation().equals(creditKey))) {
                 result = this.subWithdrawals(targetAccount, payment);
             }
         }

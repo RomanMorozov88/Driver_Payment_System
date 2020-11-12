@@ -7,13 +7,14 @@ import morozov.ru.service.repository.PaymentRepository;
 import morozov.ru.service.serviceinterface.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+import java.util.List;
+
+@Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
 public class PaymentServiceImpl implements PaymentService {
 
@@ -42,7 +43,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Page<Payment> getPaymentsForPeriod(int accountId, ControlPeriod period, Pageable pageable) {
-        return paymentRepository.getPaymentsForPeriod(accountId, period.getStart(), period.getEnd(), pageable);
+    public List<Payment> getPaymentsForPeriod(int accountId, ControlPeriod period, Pageable pageable) {
+        return paymentRepository
+                .getPaymentsForPeriod(
+                        accountId,
+                        period.getStart(),
+                        period.getEnd(),
+                        pageable)
+                .getContent();
     }
 }

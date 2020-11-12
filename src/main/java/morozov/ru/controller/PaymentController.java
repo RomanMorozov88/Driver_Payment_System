@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/dps")
 public class PaymentController {
 
     private PaymentService paymentService;
@@ -21,20 +22,36 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/dps/payments/{id}")
+    @GetMapping("/payments/{id}")
     public List<Payment> getForPeriod(
             @PathVariable Integer id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestBody ControlPeriod period
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        return paymentService.getPaymentsForPeriod(id, period, pageable).getContent();
+        List<Payment> result = null;
+        if (this.checkPeriod(period)) {
+            Pageable pageable = PageRequest.of(page, size);
+            result = paymentService.getPaymentsForPeriod(id, period, pageable);
+        }
+        return result;
     }
 
-    @GetMapping("/dps/payments/total/{id}")
+    @GetMapping("/payments/total/{id}")
     public Report getTotalForPeriod(@PathVariable Integer id, @RequestBody ControlPeriod period) {
-        return paymentService.getReport(id, period);
+        Report result = null;
+        if (this.checkPeriod(period)) {
+            result = paymentService.getReport(id, period);
+        }
+        return result;
+    }
+
+    private boolean checkPeriod(ControlPeriod period) {
+        boolean result = false;
+        if (period != null && period.getStart() != null && period.getEnd() != null) {
+            result = true;
+        }
+        return result;
     }
 
 }

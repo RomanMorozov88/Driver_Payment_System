@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/dps")
 public class AccountController {
 
     @Value("${done.answer}")
@@ -24,11 +25,11 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping("/dps/accounts/{owner}/{from}/{to}")
-    public ReMessageString transfer(@PathVariable Integer owner,
-                                    @PathVariable Integer from,
-                                    @PathVariable Integer to,
-                                    @RequestBody ReMessageBigDecimal message) {
+    @PostMapping("/accounts/{owner}/{from}/{to}")
+    public ReMessageString doInternalTransfer(@PathVariable Integer owner,
+                                              @PathVariable Integer from,
+                                              @PathVariable Integer to,
+                                              @RequestBody ReMessageBigDecimal message) {
         ReMessageString msg = new ReMessageString();
         if (accountService.internalTransfer(owner, from, to, message.getData())) {
             msg.setData(successMsg);
@@ -38,13 +39,13 @@ public class AccountController {
         return msg;
     }
 
-    @GetMapping("/dps/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public Account getBalance(@PathVariable Integer id) {
         return accountService.getById(id);
     }
 
-    @PostMapping("/dps/accounts/{id}")
-    public ReMessageString transfer(@PathVariable Integer id, @RequestBody Payment payment) {
+    @PostMapping("/accounts/{id}")
+    public ReMessageString doTransfer(@PathVariable Integer id, @RequestBody Payment payment) {
         ReMessageString msg = new ReMessageString();
         if (accountService.transfer(id, payment)) {
             msg.setData(successMsg);
@@ -54,7 +55,7 @@ public class AccountController {
         return msg;
     }
 
-    @DeleteMapping("/dps/accounts/{id}")
+    @DeleteMapping("/accounts/{id}")
     public void deleteAccount(@PathVariable Integer id) {
         accountService.delete(id);
     }
